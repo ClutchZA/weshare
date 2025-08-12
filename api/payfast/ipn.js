@@ -1,1 +1,4 @@
-export default async function handler(req,res){res.status(200).send('OK');}
+// Payfast IPN API
+export default function handler(req, res) {
+  res.status(200).json({ message: "Payfast IPN placeholder" });
+}
