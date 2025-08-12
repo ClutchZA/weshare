@@ -5,15 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>WeShare — Signup</title>
 <link rel="icon" href="/public/weshare-logo.png" />
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:40px}
+  .ok{background:#ecfdf5;border:1px solid #10b981;color:#065f46;padding:10px 12px;border-radius:8px;display:none}
+  button{padding:10px 14px;border-radius:10px;border:none;background:#ef4444;color:#fff;font-weight:700;cursor:pointer}
+  input,select{padding:10px;border:1px solid #d1d5db;border-radius:8px}
+</style>
 </head>
 <body>
-  <h1>WeShare — Ready Upload</h1>
-  <button id="payBtn">Test Create Checkout</button>
+  <h1>WeShare — Quick Test</h1>
+  <p>This build works <b>without</b> PayFast keys. The API will return a <i>mock</i> checkout URL so you can confirm the route is deployed.</p>
+  <div class="ok" id="ok"></div>
+  <p>
+    <label>Email <input id="email" value="test@example.com"></label>
+    <label>Plan
+      <select id="plan">
+        <option value="youtube">YouTube</option>
+        <option value="spotify">Spotify</option>
+        <option value="bundle">Bundle</option>
+      </select>
+    </label>
+    <button id="payBtn">Create Checkout</button>
+  </p>
 <script>
 document.getElementById('payBtn').addEventListener('click', async ()=>{
-  const payload={plan:'youtube',quantity:1,billingCycle:'monthly',email:'test@example.com'};
+  const payload={plan:document.getElementById('plan').value,quantity:1,billingCycle:'monthly',email:document.getElementById('email').value};
   const r=await fetch('/api/payfast/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  const d=await r.json(); alert(JSON.stringify(d));
+  const d=await r.json();
+  const el=document.getElementById('ok');
+  el.style.display='block';
+  el.innerHTML = 'API responded: <code>'+ (d.url||JSON.stringify(d)) +'</code>';
 });
 </script>
 </body>

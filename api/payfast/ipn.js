@@ -1,1 +1,1 @@
-export default async function handler(req,res){console.log('IPN',req.method);res.status(200).send('OK')}
+export default async function handler(req,res){res.status(200).send('OK');}
