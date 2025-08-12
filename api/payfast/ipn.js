@@ -1,4 +1,4 @@
-// Payfast IPN API
-export default function handler(req, res) {
-  res.status(200).json({ message: "Payfast IPN placeholder" });
-}
+module.exports = async (req, res) => {
+  // TODO: verify PayFast IPN signature + amount + source
+  res.status(200).send('OK');
+};
