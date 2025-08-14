@@ -1,1 +1,0 @@
-export default function handler(req,res){if(req.method==='POST'){res.status(200).json({mock:true,url:'https://sandbox.payfast.co.za/eng/process?cmd=_paynow'});}else{res.status(405).json({error:'Method not allowed'});}}
