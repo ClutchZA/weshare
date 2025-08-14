@@ -20,13 +20,3 @@ Add env vars in Vercel:
 - PAYFAST_MERCHANT_KEY
 - PAYFAST_PASSPHRASE
 Redeploy. Then checkout redirects to PayFast.
-
-
-## Local Dev
-- Install Node 18+
-- `npm i -g vercel http-server` (or use `npx`)
-- `vercel dev` starts local serverless endpoints under `/api/*`
-- Or serve static files: `npx http-server -p 3000 .` (API requires `vercel dev`)
-
-## Env Vars
-Copy `.env.example` to `.env` (for local) or add these in Vercel Project Settings.
