@@ -20,3 +20,4 @@ Add env vars in Vercel:
 - PAYFAST_MERCHANT_KEY
 - PAYFAST_PASSPHRASE
 Redeploy. Then checkout redirects to PayFast.
+
