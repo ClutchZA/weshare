@@ -1,0 +1,1 @@
+<h1>WeShare Full App</h1><button onclick="checkout()">Create Checkout</button><script>function checkout(){fetch('/api/payfast/create-checkout',{method:'POST'}).then(r=>r.json()).then(d=>alert(JSON.stringify(d)));}</script>
