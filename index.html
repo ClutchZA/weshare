@@ -1,147 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>WeShare — Premium Slots</title>
-<link rel="icon" href="/weshare-logo.png" />
-<style>
-  :root{--bg:#0b0e13;--card:#12161d;--card2:#0f1319;--fg:#e8edf5;--muted:#9aa6b2;--brand:#ef4444;--accent:#6366f1;--border:#222a36;--ring:rgba(99,102,241,.35)}
-  *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:#0b0e13;color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
-  .hero{background:linear-gradient(180deg,#111827 0%,#0d1117 100%);padding:28px 20px 36px;border-bottom:1px solid #10151d}
-  .hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px}
-  .logo{height:44px;width:44px;border-radius:12px;background:#1a1f2a;overflow:hidden;display:grid;place-items:center}
-  .logo img{height:100%;width:100%;object-fit:cover;display:block}
-  .hgroup{display:flex;flex-direction:column}.hgroup h1{margin:0;font-size:28px}.hgroup p{margin:2px 0 0;color:var(--muted)}
-  .wrap{max-width:1100px;margin:0 auto;padding:28px}.grid{display:grid;gap:22px}
-  @media(min-width:980px){.grid{grid-template-columns:1.1fr .9fr}}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:0 16px 50px rgba(0,0,0,.35)}
-  h2{margin:0 0 8px;font-size:22px}.lead{color:var(--muted);margin:6px 0 14px}
-  .plans{display:grid;gap:10px;margin-top:14px}.plan{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer}
-  .plan input{appearance:none;height:18px;width:18px;border:2px solid #556175;border-radius:50%}.plan input:checked{background:var(--brand);border-color:var(--brand)}
-  .plan .meta{display:flex;gap:10px;align-items:center}
-  .form{display:grid;gap:14px;margin-top:14px}.row2{display:grid;gap:14px}@media(min-width:640px){.row2{grid-template-columns:1fr 1fr}}
-  label{display:block;font-size:14px;color:#c9d3df;margin-bottom:6px}
-  .control{width:100%;height:46px;padding:0 12px;background:#0b1016;color:var(--fg);border:1px solid #222a36;border-radius:12px;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
-  .control:focus{border-color:var(--ring);box-shadow:0 0 0 6px var(--ring)}
-  .check{display:flex;align-items:center;gap:10px;color:#c9d3df}.check input{height:18px;width:18px;accent-color:var(--accent)}
-  .line{display:flex;justify-content:space-between;margin:8px 0;color:#cfd6df}.divider{height:1px;background:var(--border);margin:12px 0}
-  .total{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:18px}
-  .btn{width:100%;height:48px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--brand),#f87171);color:white;font-weight:800;box-shadow:0 16px 40px rgba(239,68,68,.35);cursor:pointer;letter-spacing:.2px}
-  footer{color:#93a0b0;text-align:center;padding:26px}
-  a.small{color:#9aa6b2}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WeShare — Premium Slots</title>
+  <meta name="description" content="Ad-free YouTube, background play, and Spotify Premium — set up in minutes." />
+  <link rel="icon" href="/public/weshare-logo.png" />
+
+  <style>
+    :root{
+      --bg:#0b0e13; --card:#12161d; --muted:#9aa6b2; --fg:#e8edf5; --brand:#e64444;
+      --border:#222a36; --ring:rgba(99,102,241,.35); --ok:#16a34a; --warn:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    a{color:#93c5fd;text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid #10151d}
+    header .logo{display:inline-flex;align-items:center;gap:12px}
+    .badge{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+
+    /* Cards */
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:22px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border-radius:18px;padding:22px;border:1px solid var(--border);box-shadow:0 16px 50px rgba(0,0,0,.35)}
+
+    /* Plans */
+    .plan{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--border);border-radius:14px;background:#0f131b;cursor:pointer}
+    .plan + .plan{margin-top:12px}
+    .plan input{accent-color:var(--brand);width:18px;height:18px}
+    .plan h4{margin:0;font-size:16px}
+    .muted{color:var(--muted)}
+    .price{margin-left:auto;font-weight:700}
+
+    /* Inputs */
+    .field{margin-top:16px}
+    .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    .field input, .field select{
+      width:100%;padding:12px 12px;border-radius:12px;background:#0f131b;border:1px solid var(--border);color:var(--fg);
+      outline:none
+    }
+    .field input:focus, .field select:focus{border-color:#2d3646;box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+    .inline{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:640px){.inline{grid-template-columns:1fr}}
+
+    /* Checkout */
+    .summary .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #1a202c}
+    .summary .row:last-child{border-bottom:0}
+    .cta{
+      margin-top:16px;width:100%;padding:14px 16px;border:0;border-radius:12px;background:var(--brand);color:white;
+      font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(230,68,68,.35)
+    }
+    .cta[disabled]{opacity:.6;cursor:not-allowed;box-shadow:none}
+    .fine{font-size:12px;color:var(--muted);margin-top:8px}
+
+    footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+    .check{display:flex;align-items:flex-start;gap:10px;margin-top:14px}
+    .check input{margin-top:3px;accent-color:var(--brand)}
+  </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="logo"><img src="/public/weshare-logo.png" alt="WeShare logo"></div>
-      <div class="hgroup">
-        <h1>WeShare</h1>
-        <p>YouTube Premium • Spotify Premium • South Africa</p>
-      </div>
-    </div>
-  </section>
+  <noscript><div class="wrap"><div class="card">Please enable JavaScript to continue.</div></div></noscript>
 
   <div class="wrap">
+    <header>
+      <div class="logo">
+        <!-- simple white share icon in red -->
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="24" fill="#e64444"/>
+          <path d="M31 15a4 4 0 1 1-2.828 6.828L19.8 26.3a4.002 4.002 0 0 1 0 1.4l8.372 4.472A4 4 0 1 1 27 34l-8.37-4.47A4 4 0 1 1 15 25a4 4 0 0 1 1.63.35l8.37-4.47A4 4 0 0 1 31 15Z" fill="#fff"/>
+        </svg>
+        <h1 style="margin:0;font-size:22px">WeShare</h1>
+      </div>
+      <div class="badge">YouTube Premium • Spotify Premium • South Africa</div>
+    </header>
+
     <div class="grid">
+      <!-- LEFT: form -->
       <section class="card">
-        <h2>YouTube <span style="color:#ef4444">R49</span> · Spotify <span style="color:#10b981">R39</span> · Bundle <span style="color:#6366f1">R79</span></h2>
-        <p class="lead">Ad‑free YouTube + background play, and Spotify Premium music — set up in minutes.</p>
+        <h2 style="margin:0 0 12px 0">Choose your plan</h2>
 
-        <div class="plans">
-          <label class="plan">
-            <div class="meta">
-              <input type="radio" name="plan" value="youtube" checked>
-              <div><div>YouTube Premium — Family Slot</div><div style="color:#9aa6b2">Best for video lovers</div></div>
-            </div><div><b>R49</b>/mo</div>
-          </label>
-          <label class="plan">
-            <div class="meta">
-              <input type="radio" name="plan" value="spotify">
-              <div><div>Spotify Premium — Family Slot</div><div style="color:#9aa6b2">Unlimited music</div></div>
-            </div><div><b>R39</b>/mo</div>
-          </label>
-          <label class="plan">
-            <div class="meta">
-              <input type="radio" name="plan" value="bundle">
-              <div><div>Bundle — YouTube + Spotify</div><div style="color:#9aa6b2">1 of each</div></div>
-            </div><div><b>R79</b>/mo</div>
-          </label>
+        <label class="plan">
+          <input type="radio" name="plan" value="youtube" checked />
+          <div>
+            <h4>YouTube Premium — <span class="muted">Family Slot</span></h4>
+            <div class="muted">Best for video lovers</div>
+          </div>
+          <div class="price">R<span data-price="youtube">49</span>/mo</div>
+        </label>
+
+        <label class="plan">
+          <input type="radio" name="plan" value="spotify" />
+          <div>
+            <h4>Spotify Premium — <span class="muted">Family Slot</span></h4>
+            <div class="muted">Unlimited music</div>
+          </div>
+          <div class="price">R<span data-price="spotify">39</span>/mo</div>
+        </label>
+
+        <label class="plan">
+          <input type="radio" name="plan" value="bundle" />
+          <div>
+            <h4>Bundle — <span class="muted">YouTube + Spotify</span></h4>
+            <div class="muted">1 of each</div>
+          </div>
+          <div class="price">R<span data-price="bundle">79</span>/mo</div>
+        </label>
+
+        <div class="inline">
+          <div class="field">
+            <label for="qty">Quantity</label>
+            <input id="qty" type="number" min="1" max="6" step="1" value="1" />
+          </div>
+          <div class="field">
+            <label for="billing">Billing</label>
+            <select id="billing">
+              <option value="monthly" selected>Monthly</option>
+              <option value="quarterly">Quarterly (5% off)</option>
+              <option value="yearly">Yearly (12% off)</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form">
-          <div class="row2">
-            <div><label for="qty">Quantity</label><input id="qty" class="control" type="number" min="1" max="6" value="1"></div>
-            <div><label for="cycle">Billing</label>
-              <select id="cycle" class="control">
-                <option value="monthly">Monthly</option>
-                <option value="quarterly">Quarterly (save 5%)</option>
-                <option value="yearly">Yearly (save 12%)</option>
-              </select>
-            </div>
+        <div class="inline">
+          <div class="field">
+            <label for="email">Email (for receipt)</label>
+            <input id="email" type="email" placeholder="you@example.com" required />
           </div>
-          <div class="row2">
-            <div><label for="email">Email</label><input id="email" class="control" type="email" placeholder="you@example.com"></div>
-            <div><label for="wa">WhatsApp</label><input id="wa" class="control" type="tel" placeholder="+27 82 123 4567"></div>
+          <div class="field">
+            <label for="whatsapp">WhatsApp (optional)</label>
+            <input id="whatsapp" type="tel" placeholder="+27 82 123 4567" />
           </div>
-          <div class="check"><input id="agree" type="checkbox"><label for="agree" style="margin:0">I agree to the Terms.</label></div>
         </div>
+
+        <label class="check">
+          <input id="agree" type="checkbox" />
+          <span>I agree to the <a href="/terms.html" target="_blank">Terms</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a>.</span>
+        </label>
       </section>
 
-      <aside class="card">
-        <h3 style="margin:0 0 8px">Order Summary</h3>
-        <div class="line"><span>Plan</span><span id="sPlan">YouTube</span></div>
-        <div class="line"><span>Price / slot</span><span id="sPrice">R49</span></div>
-        <div class="line"><span>Quantity</span><span id="sQty">1</span></div>
-        <div class="line"><span>Billing</span><span id="sCycle">Monthly</span></div>
-        <div class="divider"></div>
-        <div class="line"><span>Total due today</span><span id="sTotal">R49.00</span></div>
-        <button id="payBtn" class="btn" disabled>Pay by Card</button>
-        <p><a class="small" href="/api/hello" target="_blank">API ping</a></p>
+      <!-- RIGHT: summary / pay -->
+      <aside class="card summary">
+        <h3 style="margin:0 0 8px 0">Order Summary</h3>
+        <div class="row"><span>Plan</span><span id="sum-plan">YouTube</span></div>
+        <div class="row"><span>Price / slot</span><span id="sum-price">R49</span></div>
+        <div class="row"><span>Quantity</span><span id="sum-qty">1</span></div>
+        <div class="row"><span>Billing</span><span id="sum-billing">Monthly</span></div>
+        <div class="row" style="font-weight:700"><span>Total due today</span><span id="sum-total">R49.00</span></div>
+        <button id="pay-card" class="cta" disabled>Pay by Card</button>
+        <div class="fine">Card processing by PayFast.</div>
       </aside>
     </div>
+
+    <footer>© <span id="year"></span> WeShare — Card processing by PayFast.</footer>
   </div>
 
-  <footer>© 2025 WeShare — Card processing by PayFast.</footer>
+  <script>
+    const prices = { youtube:49, spotify:39, bundle:79 };
+    const cycles = { monthly:1, quarterly:3*0.95, yearly:12*0.88 };
 
-<script>
-(function(){
-  const prices={youtube:49,spotify:39,bundle:79};
-  const mult={monthly:1,quarterly:3*0.95,yearly:12*0.88};
-  const planRad=[...document.querySelectorAll('input[name=\"plan\"]')];
-  const qty=document.getElementById('qty'),cycle=document.getElementById('cycle'),email=document.getElementById('email'),wa=document.getElementById('wa'),agree=document.getElementById('agree'),payBtn=document.getElementById('payBtn');
-  const sPlan=document.getElementById('sPlan'),sPrice=document.getElementById('sPrice'),sQty=document.getElementById('sQty'),sCycle=document.getElementById('sCycle'),sTotal=document.getElementById('sTotal');
-  const fmt=n=>'R'+n.toFixed(2);
-  function currentPlan(){return planRad.find(r=>r.checked)?.value||'youtube'}
-  function update(){
-    const p=currentPlan(),price=prices[p],q=Math.max(1,Math.min(6,parseInt(qty.value||'1',10)));qty.value=q;
-    const cyc=cycle.value,m=mult[cyc],total=price*q*m;
-    sPlan.textContent=p==='youtube'?'YouTube':(p==='spotify'?'Spotify':'Bundle');
-    sPrice.textContent='R'+price;sQty.textContent=q;sCycle.textContent=cyc[0].toUpperCase()+cyc.slice(1);sTotal.textContent=fmt(total);
-    const valid=agree.checked&&email.value.includes('@')&&(wa.value||'').trim().length>=8;
-    payBtn.disabled=!valid;
-  }
-  planRad.forEach(r=>r.addEventListener('change',update));
-  [qty,cycle,email,wa,agree].forEach(e=>e.addEventListener('input',update));update();
-
-  payBtn.addEventListener('click', async ()=>{
-    const payload={
-      plan: currentPlan(),
-      quantity: Number(qty.value),
-      billingCycle: cycle.value,
-      email: email.value,
-      whatsapp: wa.value
+    const els = {
+      planRadios: Array.from(document.querySelectorAll('input[name="plan"]')),
+      qty: document.getElementById('qty'),
+      billing: document.getElementById('billing'),
+      email: document.getElementById('email'),
+      whatsapp: document.getElementById('whatsapp'),
+      agree: document.getElementById('agree'),
+      pay: document.getElementById('pay-card'),
+      sPlan: document.getElementById('sum-plan'),
+      sPrice: document.getElementById('sum-price'),
+      sQty: document.getElementById('sum-qty'),
+      sBilling: document.getElementById('sum-billing'),
+      sTotal: document.getElementById('sum-total'),
     };
-    try{
-      const res=await fetch('/api/payfast/create-checkout', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
-      const data=await res.json();
-      if(!data.url) throw new Error('No URL returned');
-      if(data.mock){ alert('Mock checkout URL (add PayFast keys to make it live):\n'+data.url); }
-      else { window.location.href=data.url; }
-    }catch(err){ alert('Checkout error: '+(err.message||err)); }
-  });
-})();
-</script>
+
+    function getSelectedPlan(){
+      return (els.planRadios.find(r=>r.checked)?.value) || 'youtube';
+    }
+    function money(n){ return 'R' + Number(n).toFixed(2); }
+
+    function updateSummary(){
+      const plan = getSelectedPlan();
+      const qty = Math.max(1, Math.min(6, parseInt(els.qty.value || 1, 10)));
+      const cycle = els.billing.value;
+      const total = (prices[plan] || 49) * qty * (cycles[cycle] || 1);
+
+      els.sPlan.textContent = ({youtube:'YouTube', spotify:'Spotify', bundle:'Bundle'})[plan] || 'YouTube';
+      els.sPrice.textContent = 'R' + (prices[plan] || 49);
+      els.sQty.textContent = qty;
+      els.sBilling.textContent = cycle[0].toUpperCase() + cycle.slice(1);
+      els.sTotal.textContent = money(total);
+
+      validate();
+    }
+
+    function validate(){
+      const okEmail = els.email.value.trim().includes('@');
+      const okAgree = els.agree.checked;
+      const okQty = parseInt(els.qty.value || 1,10) >= 1;
+      els.pay.disabled = !(okEmail && okAgree && okQty);
+    }
+
+    els.planRadios.forEach(r=>r.addEventListener('change', updateSummary));
+    ['input','change'].forEach(ev=>{
+      els.qty.addEventListener(ev, updateSummary);
+      els.billing.addEventListener(ev, updateSummary);
+      els.email.addEventListener(ev, validate);
+      els.agree.addEventListener(ev, validate);
+    });
+    updateSummary();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- PayFast POST form flow ---
+    async function payByCard(e){
+      e?.preventDefault();
+
+      if (els.pay.disabled) return;
+      els.pay.disabled = true;
+      const old = els.pay.textContent;
+      els.pay.textContent = 'Redirecting…';
+
+      const payload = {
+        plan: getSelectedPlan(),
+        billingCycle: els.billing.value,
+        quantity: Number(els.qty.value || 1),
+        email: els.email.value.trim(),
+        whatsapp: els.whatsapp.value.trim()
+      };
+
+      try{
+        const r = await fetch('/api/payfast/checkout-fields', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if (!r.ok || !data.ok) throw new Error(data.error || 'Checkout failed');
+
+        // Build and submit a real POST form to PayFast
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `${data.host}/eng/process`;
+        form.style.display = 'none';
+
+        Object.entries(data.fields).forEach(([name,value])=>{
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value;
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      }catch(err){
+        console.error(err);
+        alert('Could not start checkout. Please try again.');
+        els.pay.disabled = false;
+        els.pay.textContent = old;
+      }
+    }
+
+    els.pay.addEventListener('click', payByCard);
+  </script>
 </body>
 </html>
