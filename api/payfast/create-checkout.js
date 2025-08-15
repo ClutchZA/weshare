@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
   const urlPlus = `${host}/eng/process?${qPlus}&signature=${sigPlus}`;
   const urlPct  = `${host}/eng/process?${qPct}&signature=${sigPct}`;
 
-  // DEBUG mode returns both for testing
+  // DEBUG: return both so we can try each
   if (String(req.query.debug) === '1') {
     return res.json({
       ok: true, env: forceSandbox ? 'sandbox' : 'live',
@@ -85,6 +85,6 @@ module.exports = async (req, res) => {
     });
   }
 
-  // Default: PLUS (if it fails for you, swap this to urlPct and redeploy)
+  // Default to PLUS; if PCT is the one that works for you, switch this to urlPct and redeploy.
   return res.json({ ok: true, sandbox: forceSandbox, url: urlPlus });
 };
