@@ -1,3 +1,4 @@
+// api/payfast/checkout-fields.js
 const crypto = require('crypto');
 
 const money = n => Number(n).toFixed(2);
@@ -11,29 +12,20 @@ function ordered(obj) {
     .forEach(k => (out[k] = String(obj[k]).trim()));
   return out;
 }
-function qsPlus(obj) {                      // spaces => '+'
+function qsPlus(obj) {               // form urlencoded (spaces => +)
   const u = new URLSearchParams();
   for (const [k,v] of Object.entries(obj)) u.append(k, v);
   return u.toString();
 }
-function qsPct(obj) {                       // spaces => '%20'
-  return Object.entries(obj).map(([k,v]) => `${k}=${enc(v)}`).join('&');
-}
-function sign(base, pass) {                 // append passphrase ONLY in LIVE
+function sign(base, pass) {
   const s = pass ? `${base}&passphrase=${enc(pass)}` : base;
   return crypto.createHash('md5').update(s).digest('hex');
 }
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') return res.status(405).json({ error:'Method not allowed' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const body = req.body || {};
-  const { plan='youtube', quantity=1, billingCycle='monthly', email='test@example.com', whatsapp='' } = body;
-
-  // choose test mode via query params
-  const mode   = (req.query.mode   || 'full').toString();   // 'full' | 'min'
-  const encode = (req.query.encode || 'plus').toString();   // 'plus' | 'pct'
-  const debug  = String(req.query.debug || '0') === '1';
+  const { plan='youtube', billingCycle='monthly', quantity=1, email='test@example.com' } = req.body || {};
 
   // pricing
   const prices = { youtube:49, spotify:39, bundle:79 };
@@ -47,63 +39,36 @@ module.exports = async (req, res) => {
   const merchant_key= isSandbox ? '46f0cd694581a' : process.env.PAYFAST_MERCHANT_KEY;
   const PASS        = !isSandbox ? (process.env.PAYFAST_PASSPHRASE || '').trim() : '';
 
-  if (!merchant_id || !merchant_key) {
-    return res.status(500).json({ error:'Missing PayFast credentials' });
-  }
+  if (!merchant_id || !merchant_key) return res.status(500).json({ error:'Missing PayFast credentials' });
 
   const host  = isSandbox ? 'https://sandbox.payfast.co.za' : 'https://www.payfast.co.za';
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const base  = `${proto}://${req.headers.host}`;
 
-  // ----- PARAMS -----
-  let P;
-  if (mode === 'min') {
-    // minimal fields (good for isolating signature problems)
-    P = ordered({
-      merchant_id, merchant_key, amount,
-      item_name: `WeShare ${plan} - ${billingCycle}`,     // ASCII hyphen
-      return_url: `${base}/success.html`,
-      cancel_url: `${base}/cancel.html`,
-      notify_url: `${base}/api/payfast/ipn`,
-    });
-  } else {
-    // full set
-    P = ordered({
-      amount,
-      cancel_url: `${base}/cancel.html`,
-      custom_str1: whatsapp || undefined,
-      custom_str2: plan || undefined,
-      custom_str3: billingCycle || undefined,
-      custom_str4: String(qty),
-      email_address: email,
-      item_name: `WeShare ${plan} - ${billingCycle}`,     // ASCII hyphen
-      merchant_id,
-      merchant_key,
-      m_payment_id: `WS-${Date.now()}`,
-      name_first: (email.split('@')[0] || 'WeShare'),
-      name_last: 'Customer',
-      notify_url: `${base}/api/payfast/ipn`,
-      return_url: `${base}/success.html`,
-    });
-  }
+  // *** Minimal set of fields (recommended to isolate signature issues) ***
+  const FIELDS = ordered({
+    merchant_id,
+    merchant_key,
+    amount,
+    item_name: `WeShare ${plan} - ${billingCycle}`, // ASCII hyphen
+    return_url: `${base}/success.html`,
+    cancel_url: `${base}/cancel.html`,
+    notify_url: `${base}/api/payfast/ipn`,
+    // optional (add later once this works)
+    // m_payment_id: `WS-${Date.now()}`,
+    // email_address: email,
+  });
 
-  // ----- ENCODING & SIGNATURE -----
-  const build = encode === 'pct' ? qsPct : qsPlus; // choose encoding
-  const query = build(P);
-  const sig   = sign(query, PASS);
-  const url   = `${host}/eng/process?${query}&signature=${sig}`;
+  // Build the form-encoded string (spaces => '+') and sign it
+  const query = qsPlus(FIELDS);
+  const signature = sign(query, PASS);
 
-  if (debug) {
-    // return everything we used so you can copy/paste and try
-    return res.json({
-      ok: true,
-      env: isSandbox ? 'sandbox' : 'live',
-      mode, encode,
-      query, sigStr: PASS && !isSandbox ? `${query}&passphrase=${encodeURIComponent(PASS)}` : query,
-      signature: sig,
-      url
-    });
-  }
-
-  return res.json({ ok: true, sandbox: isSandbox, url });
+  return res.json({
+    ok: true,
+    sandbox: isSandbox,
+    host,
+    // include signature as a field – PayFast expects it as one more POST field
+    fields: { ...FIELDS, signature },
+    debug: { query, signature } // helpful for inspection
+  });
 };
